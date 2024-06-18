@@ -1,0 +1,24 @@
+{
+  "name": "nft-minter-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/nft-minter-api/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "nft-minter-api:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "nft-minter-api:build:development"
+        },
+        "production": {
+          "buildTarget": "nft-minter-api:build:production"
+        }
+      }
+    }
+  }
+}
