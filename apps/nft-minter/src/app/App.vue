@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue'
 
 import Collection from './Collection.vue';
 import ConnectButton from './ConnectButton.vue';
+import MintForm from './MintForm.vue';
 
 import { Window } from 'types/window';
 
@@ -51,4 +52,5 @@ const handleConnectWallet = async () => {
   <h3 v-if="connected">Welcome!</h3>
   <Collection v-if="connected" />
   <ConnectButton v-else @connect-wallet="handleConnectWallet" />
+  <MintForm v-if="connected" />
 </template>
