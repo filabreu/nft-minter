@@ -24,6 +24,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get('/healthcheck', (_, res) => {
+  res.send('ok');
+});
+
 app.post('/file', upload.single('file'), async (req, res) => {
   const fileStream = Readable.from(req.file.buffer);
   const pinata = new PinataClient({ pinataJWTKey: process.env.PINATA_JWT_KEY });
@@ -36,6 +40,20 @@ app.post('/file', upload.single('file'), async (req, res) => {
 
   res.json({
     fileUrl: `https://gateway.pinata.cloud/ipfs/${pinataResult.IpfsHash}`,
+  });
+})
+
+app.post('/token-uri', async (req, res) => {
+  const pinata = new PinataClient({ pinataJWTKey: process.env.PINATA_JWT_KEY });
+
+  const pinataResult = await pinata.pinJSONToIPFS({
+    name: req.body.name,
+    description: req.body.description,
+    image: req.body.image,
+  });
+
+  res.json({
+    tokenURI: `https://gateway.pinata.cloud/ipfs/${pinataResult.IpfsHash}`,
   });
 })
 
