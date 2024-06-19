@@ -19,7 +19,7 @@ const ethereum = ethereumWindow.ethereum
 const ethereumProvider = new ethers.BrowserProvider(ethereum)
 
 const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS
-const apiHost = import.meta.env.VITE_API_HOST ?? 'http://localhost:3333'
+const apiHost = import.meta.env.VITE_API_HOST
 
 console.log('contractAddress', contractAddress)
 
