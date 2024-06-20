@@ -5,7 +5,7 @@ import { ethers } from 'ethers'
 import ERC721AbiJSON from './ERC721.abi.json'
 import { Window } from 'types/window';
 
-const contractAddress = '0xbd51fa4057ef8bd493bd042b310d2b1562d8daa0'
+const contractAddress = '0xf7f08a3df47a4ee0590a8bc07f1eafe8d72e6995'
 const walletAddress = ref<string | null>(null)
 const ownedTokens = ref<number[]>([])
 
@@ -22,7 +22,6 @@ const getWalletAddress = async () => {
   const accounts = await ethereum.request({ method: 'eth_accounts' });
 
   if (accounts) {
-    console.log(accounts)
     walletAddress.value = accounts[0]
   }
 }

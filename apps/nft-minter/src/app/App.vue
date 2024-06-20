@@ -76,11 +76,11 @@ body {
     </div>
 
     <div class="content">
-      <Collection v-if="connected" />
       <MintForm v-if="connected" />
       <div v-else class="heading2">
         Connect your wallet to start
       </div>
+      <Collection v-if="connected" />
     </div>
   </div>
 </template>
