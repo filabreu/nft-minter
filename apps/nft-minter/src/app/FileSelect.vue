@@ -21,28 +21,29 @@ const handleFileChange = (e) => {
 </script>
 
 <style scoped>
-.file-select > .select-button {
-  padding: 1rem;
-
-  color: white;
-  background-color: #2EA169;
-
-  border-radius: .3rem;
-
-  text-align: center;
-  font-weight: bold;
-}
-
 .file-select > input[type="file"] {
   display: none;
+}
+
+.button {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  line-height: 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: inherit;
+  color: black;
+  background-color: mediumturquoise;
+  border-radius: 2rem;
+  cursor: pointer;
 }
 </style>
 
 <template>
   <label class="file-select">
-    <div class="select-button">
-      <span>Select File</span>
-    </div>
+    <span class="button">
+      Select File
+    </span>
     <input type="file" @change="handleFileChange"/>
   </label>
 </template>
