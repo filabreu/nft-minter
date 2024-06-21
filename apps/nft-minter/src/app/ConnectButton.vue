@@ -17,6 +17,7 @@ const checkConnection = async () => {
   if (accounts.length) {
     address.value = accounts[0]
     await changeChain()
+    emit('wallet-connected')
   }
 }
 

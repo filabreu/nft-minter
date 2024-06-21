@@ -1,45 +1,45 @@
-<script setup lang="ts">
+ <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
-import { ethers } from 'ethers'
+import axios from 'axios';
+import { ethers } from 'ethers';
 
-import ERC721AbiJSON from './ERC721.abi.json'
 import { Window } from 'types/window';
+import NFTCard from './NFTCard.vue';
 
-const contractAddress = '0xf7f08a3df47a4ee0590a8bc07f1eafe8d72e6995'
+interface TokenMetadata {
+  name: string;
+  description: string;
+  image: string;
+}
+
+interface Token {
+  id: number;
+  metadata: TokenMetadata;
+}
+
+const apiHost = import.meta.env.VITE_API_HOST
+
 const walletAddress = ref<string | null>(null)
-const ownedTokens = ref<number[]>([])
+const ownedTokens = ref<Token[]>([])
 
 const ethereumWindow = window as unknown as Window
 const ethereum = ethereumWindow.ethereum
-
-const contract = new ethers.Contract(
-  contractAddress,
-  ERC721AbiJSON,
-  new ethers.BrowserProvider(ethereum)
-)
 
 const getWalletAddress = async () => {
   const accounts = await ethereum.request({ method: 'eth_accounts' });
 
   if (accounts) {
-    walletAddress.value = accounts[0]
+    walletAddress.value = ethers.getAddress(accounts[0])
   }
 }
 
 const getOwnedTokens = async () => {
   try {
-    const balance = parseInt(await contract.balanceOf(walletAddress.value))
+    const { data: { tokens } } = await axios.get(`${apiHost}/owners/${walletAddress.value}/tokens/metadata`)
 
-    console.log('balance', balance)
+    console.log('tokens', tokens)
 
-    const collectionIndexes = balance > 0 ? Array.from(Array(balance - 1).keys()) : []
-
-    if (balance > 0) {
-      ownedTokens.value = await Promise.all(
-        collectionIndexes.map((i) => contract.tokenOfOwnerByIndex(walletAddress.value, i))
-      )
-    }
-    console.log(collectionIndexes)
+    ownedTokens.value = tokens
   } catch (error) {
     console.error(error)
   }
@@ -56,7 +56,35 @@ watch(walletAddress, () => {
 })
 </script>
 
+<style scoped>
+.collection-grid {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.empty-collection {
+  width: 100%;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+}
+</style>
+
 <template>
-  <h1>Collection</h1>
-  <p>Wallet Address: {{ walletAddress }}</p>
+  <div class="collection-grid">
+    <NFTCard
+      v-for="token in ownedTokens"
+      :key="token.id"
+      :id="token.id"
+      :name="token.metadata.name"
+      :description="token.metadata.description"
+      :image="token.metadata.image"
+      @transfer-completed="getOwnedTokens"
+    />
+    <div v-if="ownedTokens && ownedTokens.length === 0" class="empty-collection">
+      Your collection is empty
+    </div>
+  </div>
 </template>

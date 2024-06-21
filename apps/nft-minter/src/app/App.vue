@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import Collection from './Collection.vue';
 import ConnectButton from './ConnectButton.vue';
-import MintForm from './MintForm.vue';
 
 const connected = ref(false)
 
@@ -66,6 +64,25 @@ body {
   justify-content: center;
   flex-grow: 1;
 }
+
+.button {
+  padding: 0.75rem 2rem;
+  line-height: 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: inherit;
+  color: black;
+  background-color: mediumturquoise;
+  border-radius: 2rem;
+  cursor: pointer;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
 </style>
 
 <template>
@@ -75,12 +92,15 @@ body {
       <ConnectButton @wallet-connected="handleWalletConnected" />
     </div>
 
+    <nav v-if="connected">
+      <RouterLink to="/" class="button">Collection</RouterLink>
+      <RouterLink to="/mint" class="button">Mint your NFT</RouterLink>
+    </nav>
     <div class="content">
-      <MintForm v-if="connected" />
+      <RouterView v-if="connected" />
       <div v-else class="heading2">
         Connect your wallet to start
       </div>
-      <Collection v-if="connected" />
     </div>
   </div>
 </template>
